@@ -32,6 +32,11 @@ dotnet watch run --project "server"
 # changes are reflected and restart
 ```
 
+### test account
+
+ID:Administrator@Email
+password:Passw0rd!
+
 ## Debug
 
 Run(Ctrl + Shift + D) on vscode
