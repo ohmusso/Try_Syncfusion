@@ -42,3 +42,23 @@ password:Passw0rd!
 Run(Ctrl + Shift + D) on vscode
 
 ## Tools
+
+## vscode extention
+
+### yuml
+
+write uml on markdown
+
+<https://github.com/jaime-olivares/yuml-diagram/wiki>
+
+```yuml
+// {type:activity}
+// {generate:true}
+
+(start)-><a>[kettle empty]->(Fill Kettle)->|b|
+<a>[kettle full]->|b|->(Boil Kettle)->|c|
+|b|->(Add Tea Bag)->(Add Milk)->|c|->(Pour Water)
+(Pour Water)->(end)
+
+
+```
