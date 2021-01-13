@@ -42,7 +42,8 @@ namespace HelpDeskApp.Server
                         var user = new TestUser()
                         {
                             Name = testUserSection.GetValue<string>("Name"),
-                            Password = testUserSection.GetValue<string>("Password")
+                            Password = testUserSection.GetValue<string>("Password"),
+                            Role = testUserSection.GetValue<string>("Role")
                         };
                         userList.Add(user);
                     }

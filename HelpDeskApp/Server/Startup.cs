@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using HelpDeskApp.Server.Data;
 using HelpDeskApp.Server.Models;
+using System.IdentityModel.Tokens.Jwt;
+using IdentityModel;
 
 namespace HelpDeskApp.Server
 {
@@ -37,8 +39,16 @@ namespace HelpDeskApp.Server
                 .AddRoles<IdentityRole>()   // Enable roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+             services.AddIdentityServer()
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => {
+                    options.IdentityResources["openid"].UserClaims.Add("name");
+                    options.ApiResources.Single().UserClaims.Add("name");
+                    options.IdentityResources["openid"].UserClaims.Add("role");
+                    options.ApiResources.Single().UserClaims.Add("role");
+                    //                    options.IdentityResources["profile"].UserClaims.Add(JwtClaimTypes.Role);
+                });
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("role");
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
