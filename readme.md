@@ -32,10 +32,10 @@ dotnet watch run --project "server"
 # changes are reflected and restart
 ```
 
-### test account
+### test accounts
 
-ID:Administrator@Email
-password:Passw0rd!
+See Server/appsettings.json
+"TestUsers"
 
 ## Debug
 
