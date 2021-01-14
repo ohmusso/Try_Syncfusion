@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Syncfusion.Blazor;
 
 namespace HelpDeskApp.Client
 {
@@ -26,6 +27,11 @@ namespace HelpDeskApp.Client
 
             builder.Services.AddApiAuthorization()
                 .AddAccountClaimsPrincipalFactory<CustomUserFactory>();
+
+            //Register Syncfusion license 
+            var licensekey = builder.Configuration.GetSection("Syncfusion:LisenceKey");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzc3MDAyQDMxMzgyZTM0MmUzMEF2STZxNEZDcDBsWTVub2NaZ2xzbjZzSFc5ZlNCVnhYYnErWmlLR3ZoS1E9");
+            builder.Services.AddSyncfusionBlazor();
 
             await builder.Build().RunAsync();
         }
