@@ -41,6 +41,36 @@ See Server/appsettings.json
 
 Run(Ctrl + Shift + D) on vscode
 
+## SqlServer
+
+Microsoft SQL Server Express (64-bit)
+
+14.0.1000.169
+
+Windows 10 Home (10.0)
+
+### Connection strings
+
+``` json
+  "ConnectionStrings": {
+    "SqlExpressConnection": "Server=localhost\\SQLEXPRESS;Database=SyncfusionHelpDesk;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+```
+
+### Add service
+
+``` csharp:Server/Startup.cs
+services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        Configuration.GetConnectionString("SqlExpressConnection")));
+```
+
+### Add initial migration
+
+``` dotnet
+dotnet ef migrations add InitialCreate --project "Server"
+```
+
 ## Tools
 
 ### syncfusion blazor platform
