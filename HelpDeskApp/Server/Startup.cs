@@ -33,6 +33,11 @@ namespace HelpDeskApp.Server
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SqlExpressConnection")));
 
+            // To access HelpDesk tables.
+            services.AddDbContext<SyncfusionHelpDeskContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("SqlExpressConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>()

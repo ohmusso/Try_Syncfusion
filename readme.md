@@ -65,11 +65,33 @@ services.AddDbContext<ApplicationDbContext>(options =>
         Configuration.GetConnectionString("SqlExpressConnection")));
 ```
 
+``` csharp:Server/Startup.cs
+services.AddDbContext<SyncfusionHelpDeskContext>(options =>
+    options.UseSqlServer(
+        Configuration.GetConnectionString("SqlExpressConnection")));
+```
+
+To specify multiple dbcontext, repeat AddDbContext`<Dbcontext>`
+
 ### Add initial migration
 
 ``` dotnet
 dotnet ef migrations add InitialCreate --project "Server"
 ```
+
+### Create SyncfusionHelpDesk Table
+
+execute "Server/query/HelpDesk.sql" on SqlServer
+
+## Entity framwork
+
+### Reverse Engineering
+
+``` dotnet
+dotnet ef dbcontext scaffold Name=SqlExpressConnection Microsoft.EntityFrameworkCore.SqlServer --project "Server" -t "[dbo].[HelpDeskTickets]" -t "[dbo].[HelpDeskTicketDetails]" --context-dir "Data" --output-dir "Data"
+```
+
+"Name=SqlExpressConnection" is read from "ConnectionStrings" on appsettings.json
 
 ## Tools
 
@@ -122,6 +144,5 @@ write uml on markdown
 <a>[kettle full]->|b|->(Boil Kettle)->|c|
 |b|->(Add Tea Bag)->(Add Milk)->|c|->(Pour Water)
 (Pour Water)->(end)
-
 
 ```
