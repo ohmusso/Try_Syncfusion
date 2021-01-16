@@ -33,6 +33,11 @@ namespace HelpDeskApp.Server
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            // To access HelpDesk tables.
+            services.AddDbContext<SyncfusionHelpDeskContext>(options =>
+                options.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>()

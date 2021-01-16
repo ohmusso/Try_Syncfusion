@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace HelpDeskApp.Server.Data.Migrations
+namespace MigrationsApplicationDb
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class InitialApplicationDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

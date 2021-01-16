@@ -25,8 +25,11 @@ namespace HelpDeskApp.Server
 
                 try
                 {
-                    var context =services.GetRequiredService<ApplicationDbContext>();
-                    context.Database.Migrate();
+                    var userContext =services.GetRequiredService<ApplicationDbContext>();
+                    var helpDeskContext =services.GetRequiredService<SyncfusionHelpDeskContext>();
+
+                    userContext.Database.Migrate();
+                    helpDeskContext.Database.Migrate();
 
                     // requires using Microsoft.Extensions.Configuration;
                     // Set password with the Secret Manager tool.
