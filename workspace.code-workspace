@@ -8,5 +8,10 @@
 		"terminal.integrated.cwd": "./HelpDeskApp",
 		"editor.codeLens": false,
 		"diffEditor.codeLens": false
-	}
+	},
+    "extensions": {
+        "recommendations": [
+
+		]
+    }
 }
