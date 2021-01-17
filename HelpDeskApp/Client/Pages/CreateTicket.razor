@@ -1,0 +1,66 @@
+@page "/CreateTicket"
+@using Microsoft.AspNetCore.Authorization
+@using HelpDeskApp.Shared
+@attribute [Authorize]
+
+<SfToast
+    ID="toast_default" 
+    @ref="ToastObj" 
+    Title="Help Desk Ticket"
+    Timeout=5000
+    Content="@ToastContent">
+    <ToastPosition X="Right"></ToastPosition>
+</SfToast>
+
+<h3>New Help Desk Ticket</h3>
+
+<br />
+
+ <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div>
+        <SfDropDownList TItem="HelpDeskStatus" TValue="string"
+            PopupHeight="230px" Index=0
+            Placeholder="Ticket Status"
+            DataSource="@HelpDeskStatus.Statuses"
+            FloatLabelType="@FloatLabelType.Always"
+            @bind-Value="@objHelpDeskTicket.TicketStatus">
+            <DropDownListFieldSettings Text="Text" Value="ID"></DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+
+    <div>
+        <SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
+            FloatLabelType="@FloatLabelType.Always"
+            @bind-Value="@objHelpDeskTicket.TicketDate"
+            Max="DateTime.Now"
+            ShowClearButton="false">
+        </SfDatePicker>
+        <ValidationMessage For="@(() => objHelpDeskTicket.TicketDate)" />
+    </div>
+
+    <div>
+        <SfTextBox Placeholder="Ticket Description"
+            FloatLabelType="@FloatLabelType.Always"
+            @bind-Value="@objHelpDeskTicket.TicketDescription">
+        </SfTextBox>
+        <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
+    </div>
+
+    <div>
+        <SfTextBox Placeholder="Requester Email"
+            FloatLabelType="@FloatLabelType.Always"
+            @bind-Value="@objHelpDeskTicket.TicketRequesterEmail">
+        </SfTextBox>
+        <ValidationMessage For="@(() => objHelpDeskTicket.TicketRequesterEmail)" />
+    </div>
+
+    <br /><br />
+
+    <div class="e-footer-content">
+        <div class="button-container">
+            <button type="submit" class="e-btn e-normal e-primary">Save</button>
+        </div>
+    </div>
+</EditForm>
+ 
