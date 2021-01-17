@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace HelpDeskApp.Server.Data
+namespace HelpDeskApp.Shared
 {
     public partial class HelpDeskTicketDetail
     {
