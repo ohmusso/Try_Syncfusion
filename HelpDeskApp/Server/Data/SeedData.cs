@@ -40,8 +40,9 @@ namespace HelpDeskApp.Server.Data
 
             if (user == null)
             {
-                user = new ApplicationUser(userName)
+                user = new ApplicationUser()
                 {
+                    UserName = userName,
                     EmailConfirmed = true
                 };
                 await userManager.CreateAsync(user, userPassword);
