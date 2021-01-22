@@ -1,0 +1,87 @@
+@page "/administration"
+
+@*AuthorizeView control ensures that *@
+@*Only users in the Administrators role can view this content*@
+<AuthorizeView Roles="Administrators">
+    <div>
+        <div id="target" style="height: 500px;">
+            <SfGrid 
+                ID="Grid"
+                @ref = "gridObj"
+                DataSource="@colHelpDeskTickets"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowResizing="true"
+                AllowReordering="true">
+                <GridPageSettings PageSize="5"></GridPageSettings>
+                <GridEvents
+                    CommandClicked="OnCommandClicked"
+                    TValue="HelpDeskTicket">
+                </GridEvents>
+                <GridColumns>
+                    <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="150">
+                        <GridCommandColumns>
+                            <GridCommandColumn
+                                Type=CommandButtonType.Edit
+                                ButtonOption="@(new CommandButtonOptions(){ Content = "Edit" })">
+                            </GridCommandColumn>
+                            <GridCommandColumn
+                                Type=CommandButtonType.Delete
+                                ButtonOption="@(new CommandButtonOptions(){ Content = "Delete" })">
+                            </GridCommandColumn>
+                        </GridCommandColumns>
+                    </GridColumn>
+                    <GridColumn
+                        IsPrimaryKey="true"
+                        Field=@nameof(HelpDeskTicket.Id)
+                        HeaderText="ID #"
+                        TextAlign="@TextAlign.Left"
+                        Width="70">
+                    </GridColumn>
+                    <GridColumn
+                        Field=@nameof(HelpDeskTicket.TicketStatus)
+                        HeaderText="Status"
+                        TextAlign="@TextAlign.Left"
+                        Width="80">
+                    </GridColumn>
+                    <GridColumn
+                        Field=@nameof(HelpDeskTicket.TicketDate)
+                        HeaderText="Date"
+                        TextAlign="@TextAlign.Left"
+                        Width="80">
+                    </GridColumn>
+                    <GridColumn
+                        Field=@nameof(HelpDeskTicket.TicketDescription)
+                        HeaderText="Description"
+                        TextAlign="@TextAlign.Left"
+                        Width="150">
+                    </GridColumn>
+                    <GridColumn
+                        Field=@nameof(HelpDeskTicket.TicketRequesterEmail)
+                        HeaderText="Requester"
+                        TextAlign="@TextAlign.Left"
+                        Width="150">
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+
+    <SfDialog
+        Target="#target"
+        Width="100px"
+        Height="130px"
+        IsModal="true"
+        ShowCloseIcon="false"
+        @bind-Visible="DeleteRecordConfirmVisibility">
+        <DialogTemplates>
+            <Header> DELETE RECORD ? </Header>
+            <Content>
+                <div class="button-container">
+                    <button type="submit" class="e-btn e-normal e-primary" @onclick="ConfirmDeleteYes">Yes</button>
+                    <button type="submit" class="e-btn e-normal" @onclick="ConfirmDeleteNo">No</button>
+                </div>
+            </Content>
+        </DialogTemplates>
+    </SfDialog>
+</AuthorizeView>
