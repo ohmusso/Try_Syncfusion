@@ -67,7 +67,7 @@ namespace HelpDeskApp.Client.Pages{
 
             // Refresh the SfGrid
             // so the deleted record will not show.
-            gridObj.Refresh();
+            // gridObj.Refresh();
         }
 
         public async Task HandleValidSubmit()
