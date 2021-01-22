@@ -22,6 +22,30 @@ namespace HelpDeskApp.Server.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public IEnumerable<HelpDeskTicket> GetHelpDeskTickets()
+        {
+            // Return all HelpDesk tickets as IQueryable.
+            // SfGrid will use this to only pull records
+            // for the page that it is currently displaying.
+            // Note: AsNoTracking() is used because it is
+            // quicker to execute, and we do not need
+            // Entity Framework change tracking at this point.
+            return　_context.HelpDeskTickets.AsNoTracking();
+        }
+
+        [HttpGet("{HelpDeskTicketGuid}")]
+        public async Task<HelpDeskTicket> GetHelpDeskTicketAsync(string HelpDeskTicketGuid)
+        {
+            // Get the existing record.
+            var ExistingTicket = await _context.HelpDeskTickets
+            .Include(x => x.HelpDeskTicketDetails)
+            .Where(x => x.TicketGuid == HelpDeskTicketGuid)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+            return ExistingTicket;
+        }
+
         [HttpPost]
         public Task<HelpDeskTicket> CreateTicketAsync(HelpDeskTicket newHelpDeskTickets)
         {
@@ -37,6 +61,29 @@ namespace HelpDeskApp.Server.Controllers
                 DetachAllEntities();
                 throw ex;
             }
+        }
+
+        [HttpDelete("{Id}")]
+        public Task<bool> DeleteHelpDeskTicketsAsync(int Id)
+        {
+            // Get the existing record.
+            var ExistingTicket = _context.HelpDeskTickets
+                .Include(x => x.HelpDeskTicketDetails)
+                .Where(x => x.Id == Id)
+                .FirstOrDefault();
+
+            if (ExistingTicket != null)
+            {
+                // Delete the help desk ticket.
+                _context.HelpDeskTickets.Remove(ExistingTicket);
+                _context.SaveChanges();
+            }
+            else
+            {
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
 
         // Utility
