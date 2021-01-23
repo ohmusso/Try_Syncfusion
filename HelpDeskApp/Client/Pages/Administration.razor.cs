@@ -20,6 +20,7 @@ namespace HelpDeskApp.Client.Pages{
         HelpDeskTicket objHelpDeskTicket = new HelpDeskTicket() { TicketDate = DateTime.Now };
         public IQueryable<HelpDeskTicket> colHelpDeskTickets { get; set; }
         public bool DeleteRecordConfirmVisibility { get; set; } = false;
+        public bool EditDialogVisibility { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -40,6 +41,16 @@ namespace HelpDeskApp.Client.Pages{
             {
                 // Open Delete confirmation dialog.
                 this.DeleteRecordConfirmVisibility = true;
+            }
+            else if (args.CommandColumn.ButtonOption.Content == "Edit")
+            {
+                // Open the Edit dialog.
+                this.EditDialogVisibility = true;
+                StateHasChanged();
+            }
+            else
+            {
+                //nop
             }
         }
 
@@ -73,6 +84,20 @@ namespace HelpDeskApp.Client.Pages{
         public async Task HandleValidSubmit()
         {
 
+        }
+
+        public async Task SaveTicket()
+        {
+            // Update the selected help desk ticket.
+            await Http.PutAsJsonAsync<HelpDeskTicket>("HelpDesk", SelectedTicket);
+            // Close the Edit dialog.
+            this.EditDialogVisibility = false;
+            // Refresh the SfGrid
+            // so the changes to the selected
+            // help desk ticket are reflected.
+            // gridObj.Refresh();
+            var tickets = await Http.GetFromJsonAsync<IEnumerable<HelpDeskTicket>>("HelpDesk");
+            colHelpDeskTickets = tickets.AsQueryable();
         }
     }
 }

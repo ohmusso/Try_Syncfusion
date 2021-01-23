@@ -63,6 +63,56 @@ namespace HelpDeskApp.Server.Controllers
             }
         }
 
+        [HttpPut]
+        public Task<bool> UpdateTicketAsync(HelpDeskTicket UpdatedHelpDeskTicket)
+        {
+            try
+            {
+                // Get the existing record.
+                var ExistingTicket =
+                    _context.HelpDeskTickets
+                    .Where(x => x.Id == UpdatedHelpDeskTicket.Id)
+                    .FirstOrDefault();
+
+                if (ExistingTicket != null)
+                {
+                    ExistingTicket.TicketDate           = UpdatedHelpDeskTicket.TicketDate;
+                    ExistingTicket.TicketDescription    = UpdatedHelpDeskTicket.TicketDescription;
+                    ExistingTicket.TicketGuid           = UpdatedHelpDeskTicket.TicketGuid;
+                    ExistingTicket.TicketRequesterEmail = UpdatedHelpDeskTicket.TicketRequesterEmail;
+                    ExistingTicket.TicketStatus         = UpdatedHelpDeskTicket.TicketStatus;
+                    // Insert any new TicketDetails.
+                    if (UpdatedHelpDeskTicket.HelpDeskTicketDetails != null)
+                    {
+                        foreach (var item in UpdatedHelpDeskTicket.HelpDeskTicketDetails)
+                        {
+                            if (item.Id == 0)
+                            {
+                                // Create new HelpDeskTicketDetails record.
+                                HelpDeskTicketDetail newHelpDeskTicketDetails = new HelpDeskTicketDetail();
+                                newHelpDeskTicketDetails.HelpDeskTicketId   = UpdatedHelpDeskTicket.Id;
+                                newHelpDeskTicketDetails.TicketDetailDate   = DateTime.Now;
+                                newHelpDeskTicketDetails.TicketDescription  = item.TicketDescription;
+                                _context.HelpDeskTicketDetails.Add(newHelpDeskTicketDetails);
+                            }
+                        }
+                    }
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    return Task.FromResult(false);
+                }
+
+                return Task.FromResult(true);
+            }
+            catch(Exception ex)
+            {
+                DetachAllEntities();
+                throw ex;
+            }
+        }
+
         [HttpDelete("{Id}")]
         public Task<bool> DeleteHelpDeskTicketsAsync(int Id)
         {
