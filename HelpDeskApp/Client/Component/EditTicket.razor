@@ -1,0 +1,77 @@
+<div>
+    <SfDropDownList
+        TItem="HelpDeskStatus"
+        Enabled="!isReadOnly"
+        TValue="string"
+        PopupHeight="230px"
+        Index=0
+        Placeholder="Ticket Status"
+        DataSource="@HelpDeskStatus.Statuses"
+        FloatLabelType="@FloatLabelType.Always"
+        @bind-Value="@SelectedTicket.TicketStatus">
+        <DropDownListFieldSettings
+            Text="Text"
+            Value="ID">
+        </DropDownListFieldSettings>
+    </SfDropDownList>
+</div>
+<div>
+    <SfDatePicker
+        ID="TicketDate"
+        Enabled="!isReadOnly"
+        Placeholder="Ticket Date"
+        FloatLabelType="@FloatLabelType.Always"
+        @bind-Value="@SelectedTicket.TicketDate"
+        Max="DateTime.Now"
+        ShowClearButton="false">
+    </SfDatePicker>
+</div>
+<div>
+    <SfTextBox
+        Enabled="!isReadOnly"
+        Placeholder="Ticket Description"
+        FloatLabelType="@FloatLabelType.Always"
+        @bind-Value="@SelectedTicket.TicketDescription">
+    </SfTextBox>
+</div>
+<div>
+    <SfTextBox
+        Enabled="!isReadOnly"
+        Placeholder="Requester Email"
+        FloatLabelType="@FloatLabelType.Always"
+        @bind-Value="@SelectedTicket.TicketRequesterEmail">
+    </SfTextBox>
+</div>
+@if (SelectedTicket.HelpDeskTicketDetails != null)
+{
+    @if (SelectedTicket.HelpDeskTicketDetails.Count() > 0)
+    {
+        <table class="table">
+            <thead>
+                 <tr>
+                    <th>Date</th>
+                     <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var TicketDetail in SelectedTicket.HelpDeskTicketDetails)
+                {
+                    <tr>
+                        <td>
+                            @TicketDetail.TicketDetailDate.ToShortDateString()
+                        </td>
+                        <td>
+                            @TicketDetail.TicketDescription
+                       </td>
+                    </tr>
+                    }
+            </tbody>
+        </table>
+    }
+    <SfTextBox
+        Placeholder="NewHelp Desk Ticket Detail"
+        @bind-Value="@NewHelpDeskTicketDetail">
+    </SfTextBox>
+    <SfButton CssClass="e-small e-success" @onclick="AddHelpDeskTicketDetail">Add</SfButton>
+}
+<br />

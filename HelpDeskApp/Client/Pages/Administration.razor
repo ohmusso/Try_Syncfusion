@@ -2,7 +2,7 @@
 
 @*AuthorizeView control ensures that *@
 @*Only users in the Administrators role can view this content*@
-<AuthorizeView Roles="Administrators">
+<AuthorizeView>
     <div>
         <div id="target" style="height: 500px;">
             <SfGrid 
@@ -82,6 +82,24 @@
                     <button type="submit" class="e-btn e-normal" @onclick="ConfirmDeleteNo">No</button>
                 </div>
             </Content>
+        </DialogTemplates>
+    </SfDialog>
+
+    <SfDialog
+        Target="#target"
+        Width="500px"
+        Height="500px"
+        IsModal="true"
+        ShowCloseIcon="true"
+        @bind-Visible="EditDialogVisibility">
+        <DialogTemplates>
+            <Header> EDIT TICKET # @SelectedTicket.Id</Header>
+            <Content><EditTicket SelectedTicket="@SelectedTicket" /></Content>
+            <FooterTemplate>
+                <div class="button-container">
+                    <button type="submit" class="e-btn e-normal e-primary" @onclick="SaveTicket">Save</button>
+                </div>
+            </FooterTemplate>
         </DialogTemplates>
     </SfDialog>
 </AuthorizeView>
