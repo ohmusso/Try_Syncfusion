@@ -1,0 +1,23 @@
+<div class="card" style="width:30rem;">
+    <div class="row no-gutters">
+        <div class="col-md-10">
+            <img class="img-thumbnail" src="@imageDataUrl" />
+        </div>
+        <div class="col-md-2">
+            <div class="card-body" @onclick="HandleOnDelete">
+                <span class="e-icons e-delete-icon" title="Click to delete"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter] public string imageDataUrl { get; set; }
+    [Parameter] public EventCallback<string> OnDelete {get; set;}
+    [Parameter] public string imageName { get; set; }
+
+    void HandleOnDelete(){
+        OnDelete.InvokeAsync(this.imageName);
+    }
+}

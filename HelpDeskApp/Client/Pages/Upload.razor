@@ -1,0 +1,82 @@
+@page "/upload"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient Http;
+
+<SfUploader ID="UploadFiles" AllowMultiple=false>
+    <UploaderAsyncSettings SaveUrl="Storage/Save"></UploaderAsyncSettings>
+    <UploaderEvents Success="Success"></UploaderEvents>
+</SfUploader>
+
+<SfSpinner @bind-Visible="@VisibleProperty"></SfSpinner>
+
+@if (DownloadImages.Count > 0)
+{
+    <h4>Uploaded Images</h4>
+
+    @foreach (var downloadImage in DownloadImages)
+    {
+        <ImageCard
+            imageDataUrl = "@downloadImage.DataUrl"
+            imageName = "@downloadImage.Name"
+            OnDelete = "@Delete"
+        >
+        </ImageCard> 
+    }
+}
+
+@code {
+    private bool VisibleProperty {get; set;} = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.VisibleProperty = true;
+        await ShowImageFromBlobStorage();
+        this.VisibleProperty = false;
+    }
+
+    private async Task Delete(string name)
+    {
+        this.VisibleProperty = true;
+        await Http.DeleteAsync("Storage/" + name);
+        await ShowImageFromBlobStorage();
+        this.VisibleProperty = false;
+    }
+
+    private async Task Success(SuccessEventArgs args)
+    {
+        this.VisibleProperty = true;
+        await ShowImageFromBlobStorage();
+        await Task.Delay(1000);
+        this.VisibleProperty = false;
+    }
+
+    public List<DownloadImage> DownloadImages = new List<DownloadImage>();
+
+    public class DownloadImage
+    {
+        public string DataUrl { get; set; }
+        public string Name { get; set; }
+    }
+
+    private async Task ShowImageFromBlobStorage()
+    {
+        var format = "image/png";
+
+        DownloadImages.Clear();
+
+        var blobNames = await Http.GetFromJsonAsync<IEnumerable<string>>("Storage");                        
+        foreach( var name in blobNames)
+        {
+            var blob = await Http.GetByteArrayAsync("Storage/" + name);
+            var imageDataUrl = $"data:{format};base64,{Convert.ToBase64String(blob)}";   // RFC2397
+
+            var di = new DownloadImage()
+            {
+                DataUrl = imageDataUrl,
+                Name = name,
+            };
+            DownloadImages.Add(di);
+        }
+    }
+}
