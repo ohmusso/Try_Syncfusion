@@ -6,13 +6,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using HelpDeskApp.Server.Data;
-using HelpDeskApp.Server.Models;
 using System.IdentityModel.Tokens.Jwt;
 using IdentityModel;
+using HelpDeskApp.Server.Data;
+using HelpDeskApp.Server.Models;
+using HelpDeskApp.Shared;
+using HelpDeskApp.Server.Azure;
 
 namespace HelpDeskApp.Server
 {
@@ -29,6 +32,9 @@ namespace HelpDeskApp.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Options
+            services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SqlExpressConnection")));
@@ -57,6 +63,12 @@ namespace HelpDeskApp.Server
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddSingleton<IFileStorage>(serviceProvider => {
+                var AzureBlobStorage = new AzureBlobStorage(serviceProvider.GetService<IOptionsMonitor<AzureStorageConfig>>());
+                AzureBlobStorage.Initialize().GetAwaiter().GetResult();
+                return AzureBlobStorage;            
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();

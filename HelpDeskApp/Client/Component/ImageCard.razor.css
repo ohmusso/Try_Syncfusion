@@ -1,0 +1,8 @@
+.e-icons {
+    color: #3b01015f;
+    font-size: 20px;
+}
+
+.e-delete-icon::before { /*custom class to define icon*/  
+    content: '\e773'; 
+} 
